@@ -5,6 +5,9 @@ on:
       - main
     paths:
       - infra/**
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   terraform:
     runs-on: ubuntu-latest
