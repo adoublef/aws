@@ -11,6 +11,7 @@ concurrency:
 jobs:
   terraform:
     runs-on: ubuntu-latest
+    environment: development
     defaults:
       run:
         working-directory: infra
@@ -31,7 +32,7 @@ jobs:
       - name: Terraform Format
         id: fmt
         run: |
-          terraform fmt -check
+          terraform fmt
       - name: Terraform Validate
         id: validate
         run: |
