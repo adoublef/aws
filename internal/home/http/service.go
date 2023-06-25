@@ -50,10 +50,14 @@ type muxHandler struct {
 }
 
 func (mux *muxHandler) Decode(w http.ResponseWriter, r *http.Request, v any) error {
+	// should check that the incoming request has the correct headers
+	// this includes: Content-Type, Accept, and Accept-Language, etc.
 	return json.NewDecoder(r.Body).Decode(v)
 }
 
 func (mux *muxHandler) Respond(w http.ResponseWriter, r *http.Request, v any, code int) {
+	// should check that the outgoing response has the correct headers
+	// should also set some additional headers for the API
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
 	if v != nil {
