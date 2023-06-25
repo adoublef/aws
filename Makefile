@@ -1,5 +1,7 @@
 include .env
 
+include .env
+
 tfinit: infra/main.tf
 	@cd infra && terraform init
 tfmt: infra/main.tf
