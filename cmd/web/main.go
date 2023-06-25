@@ -42,15 +42,15 @@ func run(ctx context.Context, cfg *Config) (err error) {
 	logger := httplog.NewLogger("server", httplog.Options{
 		Concise: true,
 	})
-	
+
 	mux := chi.NewMux()
 	mux.Use(middleware.RequestID)
 	mux.Use(httplog.RequestLogger(logger))
 	mux.Use(middleware.RealIP)
 	// 10 req per minute until CI/CD is setup
 	mux.Use(httprate.LimitByRealIP(10, 1))
-	// timeout hard-coded for development, should be configurable 
-	mux.Use(middleware.Timeout(60*time.Second))
+	// timeout hard-coded for development, should be configurable
+	mux.Use(middleware.Timeout(60 * time.Second))
 	mux.Mount("/", s1.NewService())
 
 	srv := &http.Server{
