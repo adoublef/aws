@@ -11,7 +11,7 @@ terraform {
     key            = "infra.tfstate"
     region         = "eu-west-2"
     dynamodb_table = "adoublef-aws-tfstate-lock"
-    encrypt        = true    
+    encrypt        = true
   }
 }
 
@@ -21,4 +21,9 @@ provider "aws" {
 
 module "tfstate" {
   source = "./modules/aws/tfstate"
+}
+
+module "aws_ecr" {
+  source   = "./modules/aws/ecr"
+  ecr_name = "deploy-aws-ecr"
 }
