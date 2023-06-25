@@ -23,7 +23,7 @@ module "tfstate" {
   source = "./modules/aws/tfstate"
 }
 
-module "aws_ecr" {
+module "ecr" {
   source          = "terraform-aws-modules/ecr/aws"
   repository_name = "adoublef-aws-ecr"
 
