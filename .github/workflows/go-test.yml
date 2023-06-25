@@ -29,7 +29,8 @@ jobs:
           go-version: ${{ matrix.go-version }}
       - name: Install Dependencies
         run: |
-          go get .
+          go get ./...
+          go mod tidy
       - name: Run Tests
         run: |
           go test -v -count 1 ./...
