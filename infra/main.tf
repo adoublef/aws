@@ -25,5 +25,5 @@ module "tfstate" {
 
 module "aws_ecr" {
   source   = "./modules/aws/ecr"
-  ecr_name = "deploy-aws-ecr"
+  ecr_name = "adoublef-aws-ecr"
 }
