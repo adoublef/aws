@@ -11,6 +11,9 @@ import (
 
 	s1 "github.com/adoublef/aws/internal/home/http"
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/httprate"
+	"github.com/go-chi/httplog"
 )
 
 func main() {
@@ -35,8 +38,15 @@ func main() {
 }
 
 func run(ctx context.Context, cfg *Config) (err error) {
+	logger := httplog.NewLogger("server", httplog.Options{
+		Concise: true,
+	})
+	
 	mux := chi.NewMux()
-	// rate limiter
+	mux.Use(httplog.RequestLogger(logger))
+	mux.Use(middleware.RealIP)
+	// 10 req per minute until CI/CD is setup
+	mux.Use(httprate.LimitByRealIP(10, 1)) 
 	mux.Mount("/", s1.NewService())
 
 	srv := &http.Server{

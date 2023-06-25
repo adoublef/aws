@@ -27,6 +27,9 @@ func NewService() *Service {
 
 func (s *Service) routes() {
 	s.m.Get("/", s.handleHome())
+	s.m.Get("/panic", func(w http.ResponseWriter, r *http.Request) {
+		panic("test panic")
+	})
 }
 
 func (s *Service) handleHome() http.HandlerFunc {
