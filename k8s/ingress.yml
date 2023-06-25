@@ -3,7 +3,7 @@ kind: IngressClass
 metadata:
   name: adoublef-aws-ingress-class
 spec:
-  controller: kubernetes.io/ingress-nginx
+  controller: ingress.k8s.aws/alb
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
