@@ -23,7 +23,15 @@ module "tfstate" {
   source = "./modules/aws/tfstate"
 }
 
-module "aws_ecr" {
-  source   = "./modules/aws/ecr"
-  ecr_name = "adoublef-aws-ecr"
+module "ecr" {
+  source          = "terraform-aws-modules/ecr/aws"
+  repository_name = "adoublef-aws-ecr"
+
+    # repository_read_write_access_arns
+    # repository_lifetime_policy
+
+    tags = {
+        Terraform = "true"
+        Environment = "dev"
+    }
 }
