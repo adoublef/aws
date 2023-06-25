@@ -12,5 +12,5 @@ provider "aws" {
 }
 
 module "tfstate" {
-    source = "./modules/aws/tfstate"
+  source = "./modules/aws/tfstate"
 }
