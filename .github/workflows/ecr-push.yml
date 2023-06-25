@@ -3,6 +3,10 @@ on:
   push:
     branches:
       - main
+env:
+  AWS_REGION: eu-west-2
+  ECR_REPOSITORY: adoublef-aws-repository
+  EKS_CLUSTER: adoublef-aws-eks
 jobs:
   push:
     runs-on: ubuntu-22.04
@@ -10,24 +14,44 @@ jobs:
     permissions:
       contents: read
     steps:
-      - name: Checkout Repository
+      - 
+        name: Checkout Repository
         uses: actions/checkout@v3
-      - name: Configure AWS Credentials
+      - 
+        name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-west-2
-      - name: Login to Amazon ECR
+          aws-region: ${{ env.AWS_REGION }}
+      - 
+        name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-      - name: Build, Tag and Push Image
+      - 
+        name: Build, Tag and Push Image
         id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: adoublef-aws-repository
+          ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
+          docker push -a $ECR_REGISTRY/$ECR_REPOSITORY
+      -
+        name: Configure Kubectl
+        id: k8s
+        uses: azure/setup-kubectl@v2
+        with:
+          version: "v1.24.0" # default is latest stable
+      -
+        name: Update Kubernetes Config
+        run: |
+          aws eks update-kubeconfig --name ${{ env.EKS_CLUSTER }} --region ${{ env.AWS_REGION }}
+      - 
+        name: Deploy image to Amazon EKS
+        # aws-auth && tls-issuer
+        run: |
+          kubectl apply -f k8s/deployment.yml
+          kubectl apply -f k8s/service.yml
+          kubectl apply -f k8s/ingress.yml

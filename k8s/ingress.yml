@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  name: adoublef-aws-ingress-class
+spec:
+  controller: kubernetes.io/ingress-nginx
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: adoublef-aws-ingress
+  labels:
+    name: adoublef-aws-ingress
+spec:
+  ingressClassName: adoublef-aws-ingress-class
+  rules:
+  - http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: adoublef-aws-service
+            port: 
+              number: 80

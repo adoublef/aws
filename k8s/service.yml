@@ -1,0 +1,13 @@
+# services allow pods to be exposed to the outside world
+apiVersion: v1
+kind: Service
+metadata:
+  name: adoublef-aws-service
+spec:
+  selector:
+    app: adoublef-aws
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080
+  type: ClusterIP

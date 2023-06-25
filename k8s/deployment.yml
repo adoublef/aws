@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adoublef-aws-deployment
+  labels:
+    app: adoublef-aws
+spec:
+  selector:
+    matchLabels:
+      app: adoublef-aws
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: adoublef-aws
+    spec:
+      containers:
+        - name: adoublef-aws
+          image: 046610815556.dkr.ecr.eu-west-2.amazonaws.com/adoublef-aws-repository:latest
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: Always
