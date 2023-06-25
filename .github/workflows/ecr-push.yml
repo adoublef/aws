@@ -41,7 +41,7 @@ jobs:
       -
         name: Configure Kubectl
         id: k8s
-        uses: azure/setup-kubectl@v2
+        uses: azure/setup-kubectl@v3
         with:
           version: "v1.24.0" # default is latest stable
       -
