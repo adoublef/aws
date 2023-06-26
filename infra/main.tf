@@ -18,3 +18,11 @@ terraform {
 provider "aws" {
   region = local.region
 }
+
+# zones accessible by the AWS account within the region
+# configure the in the provider block
+data "aws_availability_zones" "available" {}
+
+data "aws_caller_identity" "current" {}
+
+data "aws_partition" "current" {}
