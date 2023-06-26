@@ -1,14 +1,13 @@
-# zones accessible by the AWS account within the region
-# configure the in the provider block
-data "aws_availability_zones" "available" {}
-
 locals {
-  region     = "eu-west-2"
-  repository = "adoublef-aws-repository"
+  region = "eu-west-2"
 
   tfstate = {
     bucket   = "adoublef-aws-tfstate"
     dynamodb = "adoublef-aws-tfstate-lock"
+  }
+
+  ecr = {
+    name = "adoublef-aws-repository"
   }
 
   vpc = {

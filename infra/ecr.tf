@@ -1,8 +1,9 @@
 module "ecr" {
   source          = "terraform-aws-modules/ecr/aws"
-  repository_name = local.repository
+  repository_name = local.ecr.name
 
-  # repository_read_write_access_arns
+  repository_read_write_access_arns = [data.aws_caller_identity.current.arn]
+  create_lifecycle_policy           = true
   repository_lifecycle_policy = jsonencode({
     rules = [
       {
@@ -20,7 +21,8 @@ module "ecr" {
     ]
   })
 
-  repository_force_delete = true
+  repository_force_delete         = true
+  repository_image_tag_mutability = "MUTABLE" #hot-fix
 
   tags = {
     Terraform = "true"
